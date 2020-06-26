@@ -1,0 +1,32 @@
+﻿@page
+@using Microsoft.AspNetCore.Identity
+@attribute [IgnoreAntiforgeryToken]
+@inject SignInManager<IdentityUser> SignInManager
+@inject TestingBlazor.Services.Authentication.CustomAuthenticationStateProvider customAuth;
+@inject Microsoft.AspNetCore.Components.Authorization.AuthenticationStateProvider AuthenticationStateProvider;
+
+
+@functions {
+	//public async Task<IActionResult> OnPost()
+	//{
+
+	//	if (SignInManager.IsSignedIn(User))
+	//	{
+	//		await SignInManager.SignOutAsync();
+	//	}
+
+	//	return Redirect("~/");
+	//}
+
+
+	public async Task<IActionResult> OnPost()
+	{
+
+		//var myStateProvider = AuthenticationStateProvider as TestingBlazor.Services.Authentication.CustomAuthenticationStateProvider;
+
+		var state = await customAuth.Logout();
+
+		return Redirect("/Login");
+
+	}
+}

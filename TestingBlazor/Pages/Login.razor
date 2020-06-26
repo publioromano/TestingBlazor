@@ -1,0 +1,54 @@
+﻿@page "/login"
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager navigationManager
+
+<h1>Log In</h1>
+
+<div class="col-md-4">
+	<form>
+		<div class="form-group">
+			<label for="Email" class="control-label">Name</label>
+			<input for="Email" class="form-control" @bind-value="@email" />
+		</div>
+		<div class="form-group">
+			<label for="Password" class="control-label">Password</label>
+			<input type="password" for="Password" class="form-control" @bind-value="@password" />
+		</div>
+		<div class="form-group">
+			<button type="button" class="btn btn-primary" @onclick="HandleValidSubmit">Authenticate</button>
+		</div>
+	</form>
+</div>
+
+@code {
+
+	private string email { get; set; }
+	private string password { get; set; }
+
+
+	private int currentCount = 0;
+
+	private bool IsAuthenticating { get; set; }
+
+	private AuthenticationState authenticationState = null;
+
+
+	public async Task HandleValidSubmit()
+	{
+		IsAuthenticating = true;
+
+		var myStateProvider = AuthenticationStateProvider as TestingBlazor.Services.Authentication.CustomAuthenticationStateProvider;
+
+		myStateProvider.LoadUser(email, password);
+
+		var state = await myStateProvider.GetAuthenticationStateAsync();
+
+		IsAuthenticating = false;
+
+		if (state.User.Identity.IsAuthenticated)
+		{
+			navigationManager.NavigateTo("/");
+		}
+	}
+
+}
