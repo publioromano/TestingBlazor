@@ -25,13 +25,7 @@
 	private string email { get; set; }
 	private string password { get; set; }
 
-
-	private int currentCount = 0;
-
 	private bool IsAuthenticating { get; set; }
-
-	private AuthenticationState authenticationState = null;
-
 
 	public async Task HandleValidSubmit()
 	{
