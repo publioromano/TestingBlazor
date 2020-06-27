@@ -1,6 +1,7 @@
 ﻿@page "/login"
-@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject AuthenticationStateProvider authenticationStateProvider
 @inject NavigationManager navigationManager
+@inject TestingBlazor.Services.Authentication.AuthenticationCommandService authenticationCommandService
 
 <h1>Log In</h1>
 
@@ -31,14 +32,11 @@
 	{
 		IsAuthenticating = true;
 
-		var myStateProvider = AuthenticationStateProvider as TestingBlazor.Services.Authentication.CustomAuthenticationStateProvider;
-
-		myStateProvider.LoadUser(email, password);
-
-		var state = await myStateProvider.GetAuthenticationStateAsync();
+		var custom = authenticationStateProvider as TestingBlazor.Services.Authentication.CustomAuthenticationStateProvider;
+		custom.LoadUser(email, password);
+		var state = authenticationCommandService.Execute(custom);
 
 		IsAuthenticating = false;
-
 		if (state.User.Identity.IsAuthenticated)
 		{
 			navigationManager.NavigateTo("/");

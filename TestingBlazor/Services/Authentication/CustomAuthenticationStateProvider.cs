@@ -8,6 +8,7 @@ namespace TestingBlazor.Services.Authentication
 	{
 		private string username;
 		private string password;
+		public bool IsAuthenticated { get; private set; }
 
 		public void LoadUser(string username, string password)
 		{
@@ -23,7 +24,7 @@ namespace TestingBlazor.Services.Authentication
 
 		public async override Task<AuthenticationState> GetAuthenticationStateAsync()
 		{
-
+			this.IsAuthenticated = false;
 			if (this.username == "teste@teste.com" && this.password == "123")
 			{
 				var identity = new ClaimsIdentity(
@@ -32,9 +33,9 @@ namespace TestingBlazor.Services.Authentication
 					}, "Own authentication Type");
 
 				Clear();
-
 				var authState = new AuthenticationState(new ClaimsPrincipal(identity));
 				base.NotifyAuthenticationStateChanged(Task.FromResult(authState));
+				this.IsAuthenticated = true;
 				return authState;
 			}
 			else
@@ -45,7 +46,7 @@ namespace TestingBlazor.Services.Authentication
 
 		}
 
-		private void Clear()
+		public void Clear()
 		{
 			this.username = null;
 			this.password = null;
